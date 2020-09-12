@@ -237,7 +237,6 @@ int main()
 
 	cout << "Reading completed!" << endl;
 
-	
 	sort(notes.begin(),notes.end(),greater<Note>());
 	sort(holds0.begin(), holds0.end(), greater<Note>());
 	sort(holds1.begin(), holds1.end(), greater<Note>());
@@ -262,63 +261,10 @@ int main()
 		if (pos == notes.size()) break;
 	}
 
-	/*
-	int state = 0;
-	pos = 0;
-	for (auto i = notes.begin(); i != notes.end();) {
-		int posJ = 0;
-		for (auto j = holds0.begin(); j != holds0.end(); ++j) {
-			if ((notes.at(pos).getTime() == holds0.at(posJ).getTime()) && (notes.at(pos).getLane() == holds0.at(posJ).getLane())){
-				if (notes.at(pos).getType() == 2) i = notes.erase(i);
-				else if (notes.at(pos).getType() == 4 && ((notes.at(pos).getTime() == holds0.at(posJ).getTime()) && (notes.at(pos).getLane() == holds0.at(posJ).getLane()))) {
-					holds0.at(posJ).setType(7);
-					i = notes.erase(i);
-				}
-				state = 1;
-				break;
-			}
-			else state = 0;
-			++posJ;
-			if (posJ == holds0.size()) break;
-		}		
-		if (state == 0) {
-			++i;
-			++pos;
-		}
-		if (pos == notes.size()) break;
-	}
-
-	pos = 0;
-	for (auto i = notes.begin(); i != notes.end();) {
-		int posJ = 0;
-		for (auto j = holds1.begin(); j != holds1.end(); ++j) {
-			if ((notes.at(pos).getTime() == holds1.at(posJ).getTime()) && (notes.at(pos).getLane() == holds1.at(posJ).getLane())) {
-				if (notes.at(pos).getType() == 2) i = notes.erase(i);
-				else if (notes.at(pos).getType() == 4 && ((notes.at(pos).getTime() == holds1.at(posJ).getTime()) && (notes.at(pos).getLane() == holds1.at(posJ).getLane()))) {
-					holds1.at(posJ).setType(7);
-					i = notes.erase(i);
-				}
-				state = 1;
-				break;
-			}
-			else state = 0;
-			++posJ;
-			if (posJ == holds1.size()) break;
-		}
-		if (state == 0) {
-			++i;
-			++pos;
-		}
-		if (pos == notes.size()) break;
-	}
-	*/
-
 	holdClear(notes, holds0);
 	holdClear(notes, holds1);
 
-
 	cout << "Processing Completed!" << endl;
-
 
 	pos = 0;
 	for (auto i = holds0.begin(); i != holds0.end(); ++i) {
