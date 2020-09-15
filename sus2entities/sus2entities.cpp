@@ -137,9 +137,9 @@ void holdClear(vector<Note>& notes, vector<Note>& holds) {
 int main()
 {
 	cout << "Where is your .sus file?"<<endl;
-	//cin >> in;
+	cin >> in;
 	cout << "Where is the destination of your file?" << endl;
-	//cin >> out;
+	cin >> out;
 
 	// ifstream constructor opens the file
 	ifstream inClientFile(in, ios::in);
