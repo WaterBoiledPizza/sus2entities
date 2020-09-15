@@ -137,9 +137,9 @@ void holdClear(vector<Note>& notes, vector<Note>& holds) {
 int main()
 {
 	cout << "Where is your .sus file?"<<endl;
-	cin >> in;
+	//cin >> in;
 	cout << "Where is the destination of your file?" << endl;
-	cin >> out;
+	//cin >> out;
 
 	// ifstream constructor opens the file
 	ifstream inClientFile(in, ios::in);
@@ -160,6 +160,7 @@ int main()
 	} // end if
 
 	vector<string> file;
+	vector<Note> chart;
 	vector<Note> notes;
 	vector<Note> holds0;
 	vector<Note> holds1;
@@ -266,35 +267,37 @@ int main()
 
 	cout << "Processing Completed!" << endl;
 
-	pos = 0;
-	for (auto i = holds0.begin(); i != holds0.end(); ++i) {
-		if (holds0.at(pos).getType() > 3) {
-			holds0.at(pos).setId(pos + 1);
-			outClientFile << "{" << "\"archetype\":" << holds0.at(pos).getType() << ",\"data\":{\"index\":0,\"values\":[" << holds0.at(pos).getId() << "," << holds0.at(pos).getTime() << "," << holds0.at(pos).getLane() << "," << holds0.at(pos).getSize() << "]}" << "}," << endl;
-		}
-		else outClientFile << "{" << "\"archetype\":" << holds0.at(pos).getType() << ",\"data\":{\"index\":1,\"values\":[" << holds0.at(pos).getTime() << "," << holds0.at(pos).getLane() << "," << holds0.at(pos).getSize() << "]}" << "}," << endl;
-		pos++;
-		if (pos == holds0.size()) break;
-	}
-	int c = pos;
-	pos = 0;
-
-	for (auto i = holds1.begin(); i != holds1.end(); ++i) {
-		if (holds1.at(pos).getType() > 3) {
-			holds1.at(pos).setId(c + pos + 1);
-			outClientFile << "{" << "\"archetype\":" << holds1.at(pos).getType() << ",\"data\":{\"index\":0,\"values\":[" << holds1.at(pos).getId() << "," << holds1.at(pos).getTime() << "," << holds1.at(pos).getLane() << "," << holds1.at(pos).getSize() << "]}" << "}," << endl;
-		}
-		else outClientFile << "{" << "\"archetype\":" << holds1.at(pos).getType() << ",\"data\":{\"index\":1,\"values\":[" << holds1.at(pos).getTime() << "," << holds1.at(pos).getLane() << "," << holds1.at(pos).getSize() << "]}" << "}," << endl;
-		pos++;
-		if (pos == holds1.size()) break;
-	}
+	chart.insert(chart.end(), notes.begin(), notes.end());
+	chart.insert(chart.end(), holds0.begin(), holds0.end());
+	chart.insert(chart.end(), holds1.begin(), holds1.end());
+	sort(chart.begin(), chart.end(), greater<Note>());
 
 	pos = 0;
-	for (auto i = notes.begin(); i != notes.end(); ++i) {
-		outClientFile << "{" << "\"archetype\":" << notes.at(pos).getType() << ",\"data\":{\"index\":1,\"values\":[" << notes.at(pos).getTime() << "," << notes.at(pos).getLane()<<","<< notes.at(pos).getSize()<< "]}" << "}" ;
+	int hold0pos = 0;
+	int hold1pos = 0;
+	for (auto i = chart.begin(); i != chart.end(); ++i) {
+		if (chart.at(pos).getId() == 0) {
+			if ((chart.at(pos).getType() == 5) || (chart.at(pos).getType() == 6) || (chart.at(pos).getType() == 7)) chart.at(pos).setId(hold0pos + 2);
+			if ((chart.at(pos).getType() == 3) || (chart.at(pos).getType() == 5)) hold0pos = pos;
+		}
+		else if (chart.at(pos).getId() == 1) {
+			if ((chart.at(pos).getType() == 5) || (chart.at(pos).getType() == 6) || (chart.at(pos).getType() == 7)) chart.at(pos).setId(hold1pos + 2);
+			if ((chart.at(pos).getType() == 3) || (chart.at(pos).getType() == 5)) hold1pos = pos;
+		}
+		//cout << chart.at(pos).getType() << " " << setw(7) << left << chart.at(pos).getTime() << " " << chart.at(pos).getLane() << " " << chart.at(pos).getSize() << " " << chart.at(pos).getId() << endl;
+		++pos;
+	}
+
+
+	pos = 0;
+	for (auto i = chart.begin(); i != chart.end(); ++i) {
+		if (chart.at(pos).getType() > 3) {
+			outClientFile << "{" << "\"archetype\":" << chart.at(pos).getType() << ",\"data\":{\"index\":0,\"values\":[" << chart.at(pos).getId() << "," << chart.at(pos).getTime() << "," << chart.at(pos).getLane() << "," << chart.at(pos).getSize() << "]}" << "}" << endl;
+		}
+		else outClientFile << "{" << "\"archetype\":" << chart.at(pos).getType() << ",\"data\":{\"index\":1,\"values\":[" << chart.at(pos).getTime() << "," << chart.at(pos).getLane() << "," << chart.at(pos).getSize() << "]}" << "}" << endl;
 		//cout << notes.at(pos).getType() << " " << ntype << " " << setw(7) << left << time << " " << lane << " " << size << endl;
 		pos++;
-		if (pos < notes.size()) outClientFile << "," << endl;
+		if (pos < chart.size()) outClientFile << "," << endl;
 		//if (pos == notes.size()) break;
 	}
 
