@@ -259,7 +259,7 @@ int main()
 		}
 		pos++;
 
-		if (pos == notes.size()) break;
+		if (pos + 1 >= notes.size()) break;
 	}
 
 	holdClear(notes, holds0);
@@ -292,9 +292,9 @@ int main()
 	pos = 0;
 	for (auto i = chart.begin(); i != chart.end(); ++i) {
 		if (chart.at(pos).getType() > 3) {
-			outClientFile << "{" << "\"archetype\":" << chart.at(pos).getType() << ",\"data\":{\"index\":0,\"values\":[" << chart.at(pos).getId() << "," << chart.at(pos).getTime() << "," << chart.at(pos).getLane() << "," << chart.at(pos).getSize() << "]}" << "}" << endl;
+			outClientFile << "{" << "\"archetype\":" << chart.at(pos).getType() << ",\"data\":{\"index\":0,\"values\":[" << chart.at(pos).getId() << "," << chart.at(pos).getTime() << "," << chart.at(pos).getLane() << "," << chart.at(pos).getSize() << "]}}";
 		}
-		else outClientFile << "{" << "\"archetype\":" << chart.at(pos).getType() << ",\"data\":{\"index\":1,\"values\":[" << chart.at(pos).getTime() << "," << chart.at(pos).getLane() << "," << chart.at(pos).getSize() << "]}" << "}" << endl;
+		else outClientFile << "{" << "\"archetype\":" << chart.at(pos).getType() << ",\"data\":{\"index\":1,\"values\":[" << chart.at(pos).getTime() << "," << chart.at(pos).getLane() << "," << chart.at(pos).getSize() << "]}}";
 		//cout << notes.at(pos).getType() << " " << ntype << " " << setw(7) << left << time << " " << lane << " " << size << endl;
 		pos++;
 		if (pos < chart.size()) outClientFile << "," << endl;
